@@ -100,7 +100,7 @@ def changedp(coins, value):
             coin_vals[x]= coin_val_test[min_ind][::]
             coin_vals[x][min_ind] = coin_val_test[min_ind][min_ind] + 1
             
-    return min_coins, coin_vals[value-1]
+    return min_coins[value-1], coin_vals[value-1]
 
 
 '''
