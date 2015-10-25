@@ -43,7 +43,7 @@ def write_output(outputfile, results):
 # This solution is very recursive and runs in exponential time.
 def changeslow(coins, value):
     def find_min(sub_coins, k):
-        if k == 0:
+        if k <= 0:
             ret_coins = [0] * len(sub_coins)
             return [ret_coins, 0]
         elif k == 1:
@@ -55,30 +55,24 @@ def changeslow(coins, value):
             ret_coins[sub_coins.index(k)] = 1
             return [ret_coins, 1]
         else:
-            min_combos = []
-            for i in range(0, k):
+            possible_m = []
+            for i in range(0, k):             
+                # Find min coins needed to make i cents
                 min1 = find_min(sub_coins, i)
+        
+                # Find min coins needed to make k - i cents
                 min2 = find_min(sub_coins, k - i)
-                combined_min = [[], k]
+                
                 for j in range(0, len(sub_coins)):
+                    combined_min = []
                     combined_min[0][j] = min_1[0][j] + min_2[0][j]
-                min_combos.append(combined_min)
-            mins = [min_combos[c][1] for c in range(0, len(min_combos))]
-            return min_combos[mins.indexof(min(mins))]
+                    combined_min[1] = sum(combined_min[0])
+                    possible_m.append(combined_min)
+            
+            # choose i that minimizes this sum
+            mins = [ possible_m[c][1] for c in range(0, len(possible_m)) ]
+            return possible_m[mins.indexof(min(mins))]
 
-    # if value == 0:
-    #     ret_coins = [0] * len(coins)
-    #     return [ret_coins, 0]
-    # elif value == 1:
-    #     ret_coins = [0] * len(coins)
-    #     ret_coins[0] = 1
-    #     return [ret_coins, 1]
-    # elif k in coins:
-    #     ret_coins = [0] * len(coins)
-    #     ret_coins[coins.index(k)] = 1
-    #     return [ret_coins, 1]
-    # else:
-    #     # return [[1,2,3], 4]
     return find_min(coins, value)
 
 
