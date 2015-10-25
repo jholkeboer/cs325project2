@@ -33,7 +33,7 @@ def write_output(outputfile, results):
 # Divide and Conquer
 #####################
 def changeslow():
-    return [[[1,2,3],4]]
+    return [ [[1,2,3], 4], [[4,5,6], 7] ]
 # To make change for A cents:
 #  If there is a K-cent coin, then that one coin is the minimum
 #  Otherwise, for each value i < K,
@@ -63,14 +63,14 @@ def changeslow():
 # Subtract the value of this coin from the amount of change to be made.
 # Repeat.
 def changegreedy():
-    return [[[1,2,3],4]]
+    return [ [[1,2,3], 4], [[4,5,6], 7] ]
 
 
 #####################
 # Dynamic Programming
 #####################
 def changedp():
-    return [[[1,2,3],4]]
+    return [ [[1,2,3], 4], [[4,5,6], 7] ]
 
 
 
