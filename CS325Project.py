@@ -100,21 +100,19 @@ def changedp(coins, value):
             coin_vals[x]= coin_val_test[min_ind][::]
             coin_vals[x][min_ind] = coin_val_test[min_ind][min_ind] + 1
             
-    return min_coins[value-1], coin_vals[value-1]
+    return [ coin_vals[value-1], min_coins[value-1] ]
 
 
-'''
+
 # execution
 if len(sys.argv) > 1:
     inputfile = sys.argv[1]
     outputfile = inputfile.split('.')[0] + "change.txt"
 
     coins = get_coins(inputfile)
-    print coins
-
 
     # let user choose algorithm
-    alg = input("Choose an algorithm.\n1. Brute Force\n2. Greedy\n3. Dynamic Programming\n")
+    alg = input("Choose an algorithm.\n1. Brute Force\n2. Greedy\n3. Dynamic Programming\nEnter your choice: ")
     results = []
     if int(alg) == 1:
         print "\nExecuting Brute Force Algorithm...\n"
@@ -125,9 +123,12 @@ if len(sys.argv) > 1:
         results = changegreedy()
         write_output(outputfile, results)
     elif int(alg) == 3:
-        print "\nExecuting Dynamic Programming Algorithm...\n"
-        results = changedp()
-        write_output(outputfile, results)    
+        print "\nExecuting Dynamic Programming Algorithm..."
+        for c in coins:
+            results.append(changedp(c[1], c[0]))
+        print "Writing Results to " + outputfile + "..."
+        write_output(outputfile, results)
+        print "Done."
     else:
         "Not a valid choice.\n"
     
@@ -136,4 +137,3 @@ if len(sys.argv) > 1:
 else:
     print "Usage: python CS325Project2.py [filename.txt].\n"
 
-'''
