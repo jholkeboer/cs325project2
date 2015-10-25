@@ -69,11 +69,41 @@ def changegreedy():
 #####################
 # Dynamic Programming
 #####################
-def changedp():
-    return [ [[1,2,3], 4], [[4,5,6], 7] ]
+def changedp(coins, value):
+
+    min_coins = [0] * value
+    coin_vals = [[0]* len(coins) for i in range(value)]
+    
+    for x in range(0,value):
+        
+        money = x + 1
+        if money < coins[0]:
+            pass
+        
+        elif money in coins:
+            min_coins[x] = 1
+            coin_vals[x][coins.index(money)] = 1
+            
+        else:
+            coin_test = []
+            coin_val_test = []
+            for y in coins:
+                if y > money:
+                    break
+                else:
+                    coin_test.append(min_coins[x - y])
+                    coin_val_test.append(coin_vals[x - y])
+                    
+            min_val = min(coin_test)
+            min_ind = coin_test.index(min_val)
+            min_coins[x] = min(coin_test) + 1
+            coin_vals[x]= coin_val_test[min_ind][::]
+            coin_vals[x][min_ind] = coin_val_test[min_ind][min_ind] + 1
+            
+    return min_coins, coin_vals
 
 
-
+'''
 # execution
 if len(sys.argv) > 1:
     inputfile = sys.argv[1]
@@ -106,3 +136,4 @@ if len(sys.argv) > 1:
 else:
     print "Usage: python CS325Project2.py [filename.txt].\n"
 
+'''
