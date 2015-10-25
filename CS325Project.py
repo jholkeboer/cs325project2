@@ -1,4 +1,5 @@
 import sys
+sys.setrecursionlimit(10000)
 
 def get_coins(inputfile):
 
@@ -32,9 +33,7 @@ def write_output(outputfile, results):
 #####################
 # Divide and Conquer
 #####################
-def changeslow():
-    return [ [[1,2,3], 4], [[4,5,6], 7] ]
-# To make change for A cents:
+# To make change for K cents:
 #  If there is a K-cent coin, then that one coin is the minimum
 #  Otherwise, for each value i < K,
 #   Find the minimum number of coins needed to make i cents
@@ -42,18 +41,46 @@ def changeslow():
 #   Choose the i that minimizes this sum
 # This algorithm can be viewed as divide-and-conquer, or as brute force.
 # This solution is very recursive and runs in exponential time.
+def changeslow(coins, value):
+    def find_min(sub_coins, k):
+        if k == 0:
+            ret_coins = [0] * len(sub_coins)
+            return [ret_coins, 0]
+        elif k == 1:
+            ret_coins = [0] * len(coins)
+            ret_coins[0] = 1
+            return [ret_coins, 1]            
+        elif k in sub_coins:
+            ret_coins = [0] * len(sub_coins)
+            ret_coins[sub_coins.index(k)] = 1
+            return [ret_coins, 1]
+        else:
+            min_combos = []
+            for i in range(0, k):
+                min1 = find_min(sub_coins, i)
+                min2 = find_min(sub_coins, k - i)
+                combined_min = [[], k]
+                for j in range(0, len(sub_coins)):
+                    combined_min[0][j] = min_1[0][j] + min_2[0][j]
+                min_combos.append(combined_min)
+            mins = [min_combos[c][1] for c in range(0, len(min_combos))]
+            return min_combos[mins.indexof(min(mins))]
 
-# def changeslow(coinarr, value, coins, amt, i):
-#
-#     if value == coinarr[i]:
-#         return coins[i] + 1, amt + 1
-#     else:
-#
-#
-#
-#
-#     for x in xrange(len(coins)):
-#
+    # if value == 0:
+    #     ret_coins = [0] * len(coins)
+    #     return [ret_coins, 0]
+    # elif value == 1:
+    #     ret_coins = [0] * len(coins)
+    #     ret_coins[0] = 1
+    #     return [ret_coins, 1]
+    # elif k in coins:
+    #     ret_coins = [0] * len(coins)
+    #     ret_coins[coins.index(k)] = 1
+    #     return [ret_coins, 1]
+    # else:
+    #     # return [[1,2,3], 4]
+    return find_min(coins, value)
+
 
 
 #####################
@@ -62,8 +89,8 @@ def changeslow():
 # Use the largest value coin possible.
 # Subtract the value of this coin from the amount of change to be made.
 # Repeat.
-def changegreedy():
-    return [ [[1,2,3], 4], [[4,5,6], 7] ]
+def changegreedy(coins, value):
+    return [[1,2,3], 4]
 
 
 #####################
@@ -114,14 +141,24 @@ if len(sys.argv) > 1:
     # let user choose algorithm
     alg = input("Choose an algorithm.\n1. Brute Force\n2. Greedy\n3. Dynamic Programming\nEnter your choice: ")
     results = []
+    
     if int(alg) == 1:
-        print "\nExecuting Brute Force Algorithm...\n"
-        results = changeslow()
-        write_output(outputfile, results)
+        print "\nExecuting Brute Force Algorithm..."
+        for c in coins:
+            results.append(changeslow(c[1], c[0]))
+        print "Writing results to " + outputfile + "..."
+        # write_output(outputfile, results)
+        print results
+        print "Done."
+    
     elif int(alg) == 2:
-        print "\nExecuting Greedy Algorithm...\n"
-        results = changegreedy()
+        print "\nExecuting Greedy Algorithm..."
+        for c in coins:
+            results.append(changegreedy(c[1], c[0]))
+        print "Writing results to " + outputfile + "..."
         write_output(outputfile, results)
+        print "Done."
+    
     elif int(alg) == 3:
         print "\nExecuting Dynamic Programming Algorithm..."
         for c in coins:
@@ -129,10 +166,9 @@ if len(sys.argv) > 1:
         print "Writing Results to " + outputfile + "..."
         write_output(outputfile, results)
         print "Done."
+    
     else:
         "Not a valid choice.\n"
-    
-
 
 else:
     print "Usage: python CS325Project2.py [filename.txt].\n"
