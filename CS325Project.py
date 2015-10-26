@@ -41,40 +41,29 @@ def write_output(outputfile, results):
 #   Choose the i that minimizes this sum
 # This algorithm can be viewed as divide-and-conquer, or as brute force.
 # This solution is very recursive and runs in exponential time.
-def changeslow(coins, value):
-    def find_min(sub_coins, k):
-        if k <= 0:
-            ret_coins = [0] * len(sub_coins)
-            return [ret_coins, 0]
-        elif k == 1:
-            ret_coins = [0] * len(coins)
-            ret_coins[0] = 1
-            return [ret_coins, 1]            
-        elif k in sub_coins:
-            ret_coins = [0] * len(sub_coins)
-            ret_coins[sub_coins.index(k)] = 1
-            return [ret_coins, 1]
-        else:
-            possible_m = []
-            for i in range(0, k):             
-                # Find min coins needed to make i cents
-                min1 = find_min(sub_coins, i)
-        
-                # Find min coins needed to make k - i cents
-                min2 = find_min(sub_coins, k - i)
+
+def changeslow(coin_arr, value, coin_index):
+    min_coins = value
+    
+    if value in coin_arr:
+        coin_index[coin_arr.index(value)] = 1
+        return 1, coin_index
+    else:
+        for coin in coin_arr: 
+            if coin > value:
+                pass
+            else:
+                zero_coins = [0]*len(coin_arr)
+                i_coins, i_coins_index = changeslow(coin_arr, coin, zero_coins)
+                zero_coins = [0]*len(coin_arr)
+                k_coins, k_coins_index = changeslow(coin_arr, value-coin, zero_coins)
                 
-                for j in range(0, len(sub_coins)):
-                    combined_min = []
-                    combined_min[0][j] = min_1[0][j] + min_2[0][j]
-                    combined_min[1] = sum(combined_min[0])
-                    possible_m.append(combined_min)
-            
-            # choose i that minimizes this sum
-            mins = [ possible_m[c][1] for c in range(0, len(possible_m)) ]
-            return possible_m[mins.index(min(mins))]
-
-    return find_min(coins, value)
-
+                sum_two = i_coins + k_coins
+            if sum_two < min_coins:
+                min_coins = sum_two
+                coin_index = [sum(x) for x in zip(i_coins_index, k_coins_index)]
+            print(coin_index)
+    return min_coins, coin_index
 
 
 #####################
