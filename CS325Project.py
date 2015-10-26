@@ -71,7 +71,7 @@ def changeslow(coins, value):
             
             # choose i that minimizes this sum
             mins = [ possible_m[c][1] for c in range(0, len(possible_m)) ]
-            return possible_m[mins.indexof(min(mins))]
+            return possible_m[mins.index(min(mins))]
 
     return find_min(coins, value)
 
@@ -84,8 +84,24 @@ def changeslow(coins, value):
 # Subtract the value of this coin from the amount of change to be made.
 # Repeat.
 def changegreedy(coins, value):
-    return [[1,2,3], 4]
+    change_sum = 0
 
+    # coin_counts holds the number of each denomination of coins used 
+    coin_counts = [0] * len(coins)
+    
+    # sort coins with largest coin first
+    sorted_coins = sorted(coins, reverse = True)
+
+    # keep adding largest coin to sum until it's bigger than value,
+    # then move on to the next largest coin, and repeat
+    while change_sum < value:
+        for c in sorted_coins:
+            # move on when the next coin puts us over the limit
+            while change_sum + c <= value:
+                change_sum += c
+                coin_counts[coins.index(c)] += 1
+
+    return [ coin_counts, sum(coin_counts) ]
 
 #####################
 # Dynamic Programming
@@ -124,8 +140,9 @@ def changedp(coins, value):
     return [ coin_vals[value-1], min_coins[value-1] ]
 
 
-
-# execution
+#####################
+# Execution
+#####################
 if len(sys.argv) > 1:
     inputfile = sys.argv[1]
     outputfile = inputfile.split('.')[0] + "change.txt"
@@ -141,7 +158,6 @@ if len(sys.argv) > 1:
         for c in coins:
             results.append(changeslow(c[1], c[0]))
         print "Writing results to " + outputfile + "..."
-        # write_output(outputfile, results)
         print results
         print "Done."
     
