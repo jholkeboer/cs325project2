@@ -42,7 +42,9 @@ def write_output(outputfile, results):
 # This algorithm can be viewed as divide-and-conquer, or as brute force.
 # This solution is very recursive and runs in exponential time.
 
-def changeslow(coin_arr, value, coin_index):
+def changeslow(coin_arr, value):
+    coin_index = [0]*len(coin_arr)
+    
     min_coins = value
     
     if value in coin_arr:
@@ -53,16 +55,14 @@ def changeslow(coin_arr, value, coin_index):
             if coin > value:
                 pass
             else:
-                zero_coins = [0]*len(coin_arr)
-                i_coins, i_coins_index = changeslow(coin_arr, coin, zero_coins)
-                zero_coins = [0]*len(coin_arr)
-                k_coins, k_coins_index = changeslow(coin_arr, value-coin, zero_coins)
+                i_coins, i_coins_index = changeslow(coin_arr, coin)
+                k_coins, k_coins_index = changeslow(coin_arr, value-coin)
                 
                 sum_two = i_coins + k_coins
             if sum_two < min_coins:
                 min_coins = sum_two
                 coin_index = [sum(x) for x in zip(i_coins_index, k_coins_index)]
-            print(coin_index)
+
     return min_coins, coin_index
 
 
