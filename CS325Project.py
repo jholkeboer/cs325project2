@@ -1,3 +1,10 @@
+# Jack Holkeboer
+# Michael Loo
+# Susan Eldridge
+# CS324 Project Group 4
+
+
+
 import sys
 sys.setrecursionlimit(10000)
 
@@ -28,7 +35,21 @@ def write_output(outputfile, results):
             f.write(str(result[1]) + '\n')
 
         f.close
-
+# [(4, [1, 1, 1, 1]), (4, [0, 1, 2, 1]), (3, [0, 0, 1, 2])]
+def write2(outputfile, results):
+    with open(outputfile, 'w+') as f:
+        for result in results:
+            line1 = '['
+            for i in range(0, len(result[1])):
+                if i <= len(result[1]) - 2:
+                    line1 += str(result[1][i]) + ', '
+                elif i == len(result[1]) - 1:
+                    line1 += str(result[1][i]) + ']\n'
+            f.write(line1)
+            f.write(str(result[0]) + '\n')            
+    
+        f.close
+    
 
 #####################
 # Divide and Conquer
@@ -147,7 +168,7 @@ if len(sys.argv) > 1:
         for c in coins:
             results.append(changeslow(c[1], c[0]))
         print "Writing results to " + outputfile + "..."
-        print results
+        write2(outputfile, results)
         print "Done."
     
     elif int(alg) == 2:
